@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz: Coordenação</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f9fafb;
+    color: #333;
+    margin: 40px;
+  }
+  h1 {
+    text-align: center;
+    color: #0056b3;
+  }
+  .question {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+    padding: 20px;
+  }
+  .option {
+    display: block;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .option:hover {
+    background-color: #f0f0f0;
+  }
+  .correct {
+    background-color: #c8f7c5;
+    border-color: #28a745;
+    color: #155724;
+  }
+  .incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+  }
+  .explanation {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+    display: none;
+  }
+  #restart, #score, #showAnswers {
+    display: block;
+    margin: 25px auto;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  #restart {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  #restart:hover {
+    background: #0056b3;
+  }
+  #showAnswers {
+    background: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  #showAnswers:hover {
+    background: #1e7e34;
+  }
+  #score {
+    background: #e9ecef;
+    color: #333;
+    border: 1px solid #ccc;
+    width: fit-content;
+  }
+  #message {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Quiz: Coordenação</h1>
+
+<div id="quiz"></div>
+
+<div id="score" style="display:none;"></div>
+<div id="message" style="display:none;"></div>
+<button id="showAnswers" style="display:none;">📘 Ver Gabarito Completo</button>
+<button id="restart">🔄 Reiniciar Quiz</button>
+
+<script>
+const questions = [
+  {
+    question: "1. Qual o tipo de oração coordenada na frase: 'Estudou muito, mas não passou na prova.'",
+    options: ["A) Aditiva", "B) Adversativa", "C) Alternativa", "D) Conclusiva"],
+    correct: 1,
+    explanation: "A conjunção 'mas' indica oposição, por isso é uma oração coordenada adversativa."
+  },
+  {
+    question: "2. Classifique a oração: 'Ele correu, e venceu a corrida.'",
+    options: ["A) Aditiva", "B) Adversativa", "C) Explicativa", "D) Alternativa"],
+    correct: 0,
+    explanation: "A conjunção 'e' adiciona ideias, caracterizando uma coordenação aditiva."
+  },
+  {
+    question: "3. Qual a conjunção que indica oração coordenada explicativa?",
+    options: ["A) e", "B) mas", "C) porque", "D) ou"],
+    correct: 2,
+    explanation: "A conjunção 'porque' introduz uma explicação — é uma oração coordenada explicativa."
+  },
+  {
+    question: "4. Identifique o tipo de coordenação: 'Ora chora, ora ri.'",
+    options: ["A) Alternativa", "B) Conclusiva", "C) Aditiva", "D) Explicativa"],
+    correct: 0,
+    explanation: "A alternância de 'ora... ora' mostra alternância de ações, logo é coordenação alternativa."
+  },
+  {
+    question: "5. Qual a frase apresenta coordenação assindética?",
+    options: ["A) Estudou muito e passou na prova", "B) Ele chegou, falou e saiu", "C) Levantou-se, pegou o caderno, foi embora", "D) Queria sair, mas estava chovendo"],
+    correct: 2,
+    explanation: "A coordenação assindética ocorre sem conjunções; em 'Levantou-se, pegou o caderno, foi embora' as orações são justapostas."
+  },
+  {
+    question: "6. Complete a frase com a conjunção correta: 'Ele estava cansado, ___ continuou trabalhando.'",
+    options: ["A) mas", "B) e", "C) ou", "D) porque"],
+    correct: 0,
+    explanation: "A conjunção 'mas' indica oposição entre as ideias: estava cansado, porém continuou."
+  },
+  {
+    question: "7. Classifique a frase: 'Não estudou, portanto não passou no teste.'",
+    options: ["A) Aditiva", "B) Conclusiva", "C) Alternativa", "D) Adversativa"],
+    correct: 1,
+    explanation: "A conjunção 'portanto' indica uma conclusão, sendo coordenação conclusiva."
+  },
+  {
+    question: "8. Qual conjunção indica coordenação alternativa?",
+    options: ["A) e", "B) ora… ora", "C) mas", "D) portanto"],
+    correct: 1,
+    explanation: "A expressão 'ora... ora' indica alternância, característica das orações coordenadas alternativas."
+  },
+  {
+    question: "9. Identifique o tipo de oração: 'Ela correu, porém tropeçou.'",
+    options: ["A) Conclusiva", "B) Adversativa", "C) Aditiva", "D) Alternativa"],
+    correct: 1,
+    explanation: "A conjunção 'porém' indica contraste — coordenação adversativa."
+  },
+  {
+    question: "10. Qual frase é coordenada sindética aditiva?",
+    options: ["A) Ele estudou e passou na prova", "B) Estava atrasado, mas correu", "C) Ora canta, ora dança", "D) Não estudou, portanto falhou"],
+    correct: 0,
+    explanation: "A conjunção 'e' liga duas ideias com valor de adição, caracterizando coordenação sindética aditiva."
+  }
+];
+
+const quizDiv = document.getElementById("quiz");
+const scoreDiv = document.getElementById("score");
+const msgDiv = document.getElementById("message");
+const restartBtn = document.getElementById("restart");
+const showAnswersBtn = document.getElementById("showAnswers");
+
+let score = 0;
+let answered = 0;
+
+function renderQuiz() {
+  quizDiv.innerHTML = "";
+  scoreDiv.style.display = "none";
+  msgDiv.style.display = "none";
+  showAnswersBtn.style.display = "none";
+  score = 0;
+  answered = 0;
+
+  questions.forEach((q) => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    qDiv.innerHTML = `<p><strong>${q.question}</strong></p>`;
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement("div");
+      btn.className = "option";
+      btn.textContent = opt;
+      btn.onclick = () => {
+        if (btn.classList.contains("correct") || btn.classList.contains("incorrect")) return;
+        const all = qDiv.querySelectorAll(".option");
+        all.forEach(o => o.style.pointerEvents = "none");
+
+        answered++;
+        if (i === q.correct) {
+          btn.classList.add("correct");
+          score++;
+        } else {
+          btn.classList.add("incorrect");
+          const exp = qDiv.querySelector(".explanation");
+          exp.innerHTML = `❌ Resposta incorreta.<br>✅ Correta: ${q.options[q.correct]}<br>${q.explanation}`;
+          exp.style.display = "block";
+        }
+
+        if (answered === questions.length) {
+          showScore();
+        }
+      };
+      qDiv.appendChild(btn);
+    });
+
+    const expDiv = document.createElement("div");
+    expDiv.className = "explanation";
+    qDiv.appendChild(expDiv);
+    quizDiv.appendChild(qDiv);
+  });
+}
+
+function showScore() {
+  scoreDiv.style.display = "block";
+  scoreDiv.textContent = `🎯 Você acertou ${score} de ${questions.length} questões!`;
+
+  msgDiv.style.display = "block";
+  if (score >= 9) {
+    msgDiv.textContent = "🌟 Excelente! Você domina o conteúdo!";
+  } else if (score >= 6) {
+    msgDiv.textContent = "👍 Bom trabalho! Mas ainda dá pra melhorar um pouco.";
+  } else {
+    msgDiv.textContent = "📘 Continue estudando! Reveja o conteúdo e tente novamente.";
+  }
+
+  showAnswersBtn.style.display = "block";
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function showAllAnswers() {
+  const allQuestions = document.querySelectorAll(".question");
+  allQuestions.forEach((qDiv, index) => {
+    const opts = qDiv.querySelectorAll(".option");
+    opts[questions[index].correct].classList.add("correct");
+    const exp = qDiv.querySelector(".explanation");
+    exp.innerHTML = `✅ Correta: ${questions[index].options[questions[index].correct]}<br>${questions[index].explanation}`;
+    exp.style.display = "block";
+  });
+}
+
+restartBtn.addEventListener("click", () => {
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+showAnswersBtn.addEventListener("click", showAllAnswers);
+
+renderQuiz();
+</script>
+</body>
+</html>
